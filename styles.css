@@ -1,0 +1,229 @@
+@import url(reset.css);
+
+:root {
+
+/* COLORES =============================== */
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-brown: #bd9643;
+
+
+/* TIPOGRAFIA ============================ */
+    --font-h1: 'Space Grotesk', sans-serif;
+    --font-h2: 'Space Grotesk', sans-serif;
+    --font-p: 'Karla', sans-serif;
+    --font-nav: 'Space Grotesk', sans-serif;
+
+
+    /* TAMAÑOS =========================== */
+    --font-size-h1: 35px;
+    --font-size-h2: 25px;
+    --font-size-p: 16px;
+    --font-size-nav: 16px;
+
+    /* MEDIDAS RESPONSIVE ================ */
+    --width-phone: 360px;
+    --width-tablet: 768px;
+    --width-desktop: 1200px;
+
+}
+
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: var(--color-brown);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    cursor: none;
+}
+
+.space-grotesk-main {
+    font-family: "Space Grotesk", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.karla-second {
+    font-family: "Karla", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* CURSOR ================================ */
+
+.cursor {
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--color-black);
+    background: transparent;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0 0 0 0;      /* centra el círculo bajo el ratón */
+    pointer-events: none;
+    z-index: 9999;
+
+    transition: transform 0.3s ease, border-width 0.3s ease;
+    will-change: transform;       /* indica al navegador que un elemento está a punto de sufrir una modificación geométrica*/
+}
+
+.cursor-grow {
+    transform: scale(4);
+    border: none;
+    background: color-mix(in srgb, var(--color-brown) 50%, transparent);
+    backdrop-filter: invert(1);
+    -webkit-backdrop-filter: invert(1);   /* compatibilidad Safari/iOS */
+}
+
+/* TEXTOS ================================ */
+
+#header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.header-menu {
+    margin: 20px 40px 40px 40px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    font-family: var(--font-nav);
+    font-size: var(--font-size-nav);
+    font-weight: 600;
+}
+
+.header-menu-item a {
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* centra horizontalmente */
+    justify-content: center;   /* centra verticalmente */
+    text-align: center;
+
+    min-height: 100vh;         /* ocupa toda la altura de la pantalla */
+}
+
+.hero-title {
+    position: relative;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.hero h1{
+    pointer-events: auto;
+    
+    font-family: var(--font-h1);
+    font-size: var(--font-size-h1);
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.hero h2{
+    font-family: var(--font-h2);
+    font-size: var(--font-h2);
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Efecto "roll" letra a letra: cada letra sube y entra su copia desde abajo */
+.link-roll {
+    position: relative;             /* para el subrayado (::after) */
+    display: inline-flex;
+    line-height: 1.2;
+    vertical-align: top;
+    padding-bottom: 2px;            /* hueco para el subrayado */
+}
+
+/* cada letra es una columna con su copia debajo */
+.link-roll .char {
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.2em;
+    overflow: hidden;              /* oculta la copia de abajo */
+}
+
+/* los dos spans internos (letra de arriba y copia de abajo) */
+.link-roll .char span {
+    transition: transform 0.3s ease;
+    transition-delay: calc(var(--i) * 0.04s);   /* la 1ª letra antes que el resto */
+}
+
+/* la copia de abajo en otro color para que se note el giro */
+.link-roll .char span:last-child {
+    color: var(--color-black);
+}
+
+.link-roll:hover .char span {
+    transform: translateY(-100%);  /* sube una línea: aparece la copia */
+}
+
+/* subrayado que crece a la vez (todo de golpe, no escalonado) */
+.link-roll::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2.5px;
+    background: var(--color-black);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.link-roll:hover::after {
+    transform: scaleX(1);
+}
+
+/* GALERIA ================================ */
+
+.gallery { 
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.title {
+    position: absolute;
+    transform:
+        translate(-50%, -50%)
+        translate(var(--px, 0px), var(--py, 0px));
+    will-change: transform; /* indica que un elemento va a cambiar */
+}
+
+.title img {
+    display: block;
+    height: auto;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.title:hover {
+    z-index: 100;
+}
+
+.title:hover img {
+    transform: scale(2.3);
+    box-shadow: 0 18px 50px oklch(0.2 0.02 95 / 0.32);
+}
