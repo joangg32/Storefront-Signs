@@ -91,11 +91,9 @@ files.forEach((src, i) => {
     figure.style.left = (col + 0.5) * cellW + (Math.random() - 0.5) * cellW * 0.6 + "%";
     figure.style.top  = (row + 0.5) * cellH + (Math.random() - 0.5) * cellH * 0.6 + "%";
 
-    // Cada foto es un enlace que abre su ficha en una pestaña nueva
+    // Cada foto es un enlace que abre su ficha en la misma pestaña
     const link = document.createElement("a");
     link.href = "./rotulo.html?id=" + idDesdeSrc(src);
-    link.target = "_blank";
-    link.rel = "noopener";
 
     const img = document.createElement("img");
     img.src = src;

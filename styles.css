@@ -6,6 +6,7 @@
     --color-black: #000000;
     --color-white: #ffffff;
     --color-brown: #bd9643;
+    --color-brown-dark: #6b511f;
 
 
 /* TIPOGRAFIA ============================ */
@@ -18,7 +19,7 @@
     /* TAMAÑOS =========================== */
     --font-size-h1: 35px;
     --font-size-h2: 25px;
-    --font-size-p: 16px;
+    --font-size-p: 13px;
     --font-size-nav: 16px;
 
     /* MEDIDAS RESPONSIVE ================ */
@@ -31,6 +32,36 @@
 html {
     box-sizing: border-box;
     scroll-behavior: smooth;
+
+    /* Oculta la barra de scroll vertical (se conserva el desplazamiento) */
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* Edge / IE antiguos */
+}
+
+/* TRANSICIÓN ENTRE PÁGINAS ============== */
+body {
+    animation: page-fade-in 0.35s ease both;
+}
+
+body.page-leaving {
+    animation: page-fade-out 0.15s ease both;
+}
+
+@keyframes page-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes page-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {         /* Chrome / Safari / Edge */
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 ::selection {
@@ -80,8 +111,6 @@ html {
     transform: scale(4);
     border: none;
     background: color-mix(in srgb, var(--color-brown) 50%, transparent);
-    backdrop-filter: invert(1);
-    -webkit-backdrop-filter: invert(1);   /* compatibilidad Safari/iOS */
 }
 
 /* TEXTOS ================================ */
@@ -114,7 +143,7 @@ html {
 .hero {
     position: relative;
     overflow: hidden;
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;       /* centra horizontalmente */
@@ -132,7 +161,7 @@ html {
 
 .hero h1{
     pointer-events: auto;
-    
+
     font-family: var(--font-h1);
     font-size: var(--font-size-h1);
     font-weight: 800;
@@ -172,7 +201,7 @@ html {
 
 /* la copia de abajo en otro color para que se note el giro */
 .link-roll .char span:last-child {
-    color: var(--color-black);
+    color: var(--color-brown-dark);
 }
 
 .link-roll:hover .char span {
@@ -187,7 +216,7 @@ html {
     bottom: 0;
     width: 100%;
     height: 2.5px;
-    background: var(--color-black);
+    background: var(--color-brown-dark);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
@@ -199,9 +228,11 @@ html {
 
 /* GALERIA ================================ */
 
-.gallery { 
+.gallery {
     position: absolute;
-    inset: 0;
+    /* margen de seguridad para que los rótulos no se salgan de la pantalla.
+       Arriba algo más para dejar hueco al header. */
+    inset: 96px 50px 50px 50px;
     z-index: 1;
 }
 

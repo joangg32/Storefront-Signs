@@ -1,0 +1,115 @@
+/* PÁGINA DE PROYECTO =========================================================
+   Estilos de info.html. Reutiliza variables y tipografías de styles.css. */
+
+.info-page {
+    background: var(--color-white);
+    color: var(--color-black);
+    min-height: 100vh;
+}
+
+.info-page #header {
+    position: sticky;
+    top: 0;             /* fijado justo donde está: no hay recorrido hasta engancharse */
+    display: flow-root; /* evita que el margen del menú empuje el header hacia abajo */
+    /* degradado sutil: blanco arriba que se desvanece hacia abajo */
+    background: linear-gradient(
+        to bottom,
+        var(--color-white) 0%,
+        color-mix(in srgb, var(--color-white) 70%, transparent) 60%,
+        transparent 100%
+    );
+}
+
+/* Contenedor general */
+.info {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 34.5px 24px 100px;
+}
+
+/* Intro ------------------------------------------------------------------- */
+.info-eyebrow {
+    font-family: var(--font-nav);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-brown);
+    margin-bottom: 18px;
+}
+
+.info-titulo {
+    font-family: var(--font-h1);
+    font-size: clamp(40px, 8vw, 76px);
+    font-weight: 800;
+    line-height: 1.02;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    margin-bottom: 28px;
+}
+
+.info-lead {
+    font-family: var(--font-p);
+    font-size: calc(var(--font-size-p) * 1.4);
+    line-height: 1.55;
+    max-width: 60ch;
+    color: color-mix(in srgb, var(--color-black) 90%, transparent);
+    text-wrap: pretty;
+}
+
+/* Texto corrido ----------------------------------------------------------- */
+.info-texto {
+    margin-top: 8px;   /* pegado al título de la sección */
+}
+
+.info-texto p {
+    font-family: var(--font-p);
+    font-size: var(--font-size-p);
+    line-height: 1.75;
+    max-width: 62ch;
+    color: color-mix(in srgb, var(--color-black) 86%, transparent);
+    text-wrap: pretty;
+}
+
+.info-texto p + p {
+    margin-top: 14px;
+}
+
+/* Botón enlace ------------------------------------------------------------ */
+.info-boton {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 12px 22px;
+    font-family: var(--font-nav);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-black);
+    border: 1.5px solid var(--color-black);
+    border-radius: 999px;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.info-boton:hover {
+    background: var(--color-brown-dark);
+    border-color: var(--color-brown-dark);
+    color: var(--color-white);
+}
+
+/* Firma ------------------------------------------------------------------- */
+.info-firma {
+    margin-top: 56px;
+    font-family: var(--font-nav);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--color-black) 55%, transparent);
+}
+
+.info-firma strong {
+    font-weight: 700;
+    color: var(--color-black);
+}
+

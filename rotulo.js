@@ -1,92 +1,50 @@
 // FICHA DE RÓTULO ============================================================
 // Lee ?id=<slug> de la URL, busca los datos en window.ROTULOS y monta la ficha:
-// foto original + SVG que se "escribe" a modo caligráfico + ubicación e historia.
+// foto original a la izquierda + descripción del letrero a la derecha.
 
 (() => {
     const params = new URLSearchParams(location.search);
     const id = params.get("id");
     const data = (window.ROTULOS || {})[id];
 
-    const $titulo    = document.getElementById("titulo");
-    const $original  = document.getElementById("original");
-    const $holder    = document.getElementById("svg-holder");
-    const $aviso     = document.getElementById("svg-aviso");
-    const $replay    = document.getElementById("replay");
-    const $ubicacion = document.getElementById("ubicacion");
-    const $historia  = document.getElementById("historia");
+    const $titulo      = document.getElementById("titulo");
+    const $original    = document.getElementById("original");
+    const $descripcion = document.getElementById("descripcion");
 
     // --- Sin datos: mensaje y salida -----------------------------------------
     if (!data) {
         $titulo.textContent = "Rótulo no encontrado";
-        $aviso.textContent = "No hay datos para este rótulo.";
+        $descripcion.textContent = "No hay datos para este rótulo.";
         return;
     }
 
     // --- Rellenar textos e imagen --------------------------------------------
-    document.title = data.nombre + " · Rótulos animados";
+    document.title = data.nombre + " · Rótulos valencianos";
     $titulo.textContent = data.nombre;
     $original.src = data.original;
     $original.alt = "Rótulo de " + data.nombre;
-    $ubicacion.textContent = data.ubicacion || "—";
-    $historia.textContent = data.historia || "—";
+    $descripcion.textContent = data.descripcion || "—";
 
-    // --- Cargar y animar el SVG ----------------------------------------------
-    fetch(data.svg)
-        .then((r) => {
-            if (!r.ok) throw new Error("404");
-            return r.text();
-        })
-        .then((markup) => {
-            $holder.innerHTML = markup;
-            const svg = $holder.querySelector("svg");
-            if (!svg) throw new Error("sin <svg>");
-            prepararTrazos(svg);
-            $replay.hidden = false;
-            animar();
-        })
-        .catch(() => {
-            $aviso.textContent =
-                "Aún no hay SVG para este rótulo.\n(Colócalo en " + data.svg + ")";
-        });
+    // Fecha de la fotografía (solo se pinta si existe en los datos)
+    document.getElementById("meta").textContent = data.fecha || "";
 
-    // Prepara cada trazo: marca data-draw, calcula su longitud y guarda el
-    // relleno final para que aparezca tras dibujarse el contorno.
-    function prepararTrazos(svg) {
-        const trazos = svg.querySelectorAll("path, line, polyline, polygon, circle, ellipse, rect");
-        const VELOCIDAD = 420; // unidades de trazo por segundo (mayor = escribe más rápido)
-        let delay = 0;
+    // --- Navegación anterior / siguiente (orden de ROTULOS, circular) --------
+    const ids = Object.keys(window.ROTULOS || {});
+    const pos = ids.indexOf(id);
+    const prevId = ids[(pos - 1 + ids.length) % ids.length];
+    const nextId = ids[(pos + 1) % ids.length];
+    document.getElementById("nav-prev").href = "./rotulo.html?id=" + prevId;
+    document.getElementById("nav-next").href = "./rotulo.html?id=" + nextId;
 
-        trazos.forEach((el) => {
-            let len = 0;
-            try { len = el.getTotalLength(); } catch (_) { len = 0; }
-            if (!len) return; // elementos sin longitud (defs, etc.) se ignoran
-
-            // duración proporcional a la longitud: trazos largos tardan más
-            const dur = Math.min(2.2, Math.max(0.35, len / VELOCIDAD));
-
-            // relleno final: el que ya trae el SVG (o ninguno si es line-art)
-            const fillActual = getComputedStyle(el).fill;
-            const fillFinal = fillActual && fillActual !== "none" ? fillActual : "none";
-
-            el.setAttribute("data-draw", "");
-            el.style.setProperty("--len", len);
-            el.style.setProperty("--fill-final", fillFinal);
-            el.style.setProperty("--delay", delay.toFixed(2) + "s");
-            el.style.setProperty("--dur", dur.toFixed(2) + "s");
-            el.style.fill = "none"; // se oculta hasta terminar el trazo
-
-            // el siguiente trazo arranca antes de acabar el actual: pluma continua
-            delay += dur * 0.85;
-        });
-    }
-
-    function animar() {
-        $holder.classList.remove("animar");
-        void $holder.offsetWidth; // reinicia las animaciones CSS
-        $holder.classList.add("animar");
-    }
-
-    $replay.addEventListener("click", animar);
+    // --- Descripción inmóvil: el sticky "engancha" justo donde nace el texto,
+    //     así no se desplaza ni un píxel al hacer scroll ------------------------
+    const $desc = document.querySelector(".ficha-descripcion");
+    const fijarDescripcion = () => {
+        $desc.style.top = "auto";   // volver a la posición natural antes de medir
+        $desc.style.top = ($desc.getBoundingClientRect().top + window.scrollY) + "px";
+    };
+    requestAnimationFrame(fijarDescripcion);
+    addEventListener("resize", fijarDescripcion);
 
     // --- Cursor personalizado (coherente con la home) ------------------------
     const cursor = document.createElement("div");
@@ -103,7 +61,7 @@
         requestAnimationFrame(follow);
     })();
 
-    document.querySelectorAll(".link-roll, .btn-replay, img").forEach((el) => {
+    document.querySelectorAll(".link-roll, img").forEach((el) => {
         el.addEventListener("mouseenter", () => cursor.classList.add("cursor-grow"));
         el.addEventListener("mouseleave", () => cursor.classList.remove("cursor-grow"));
     });

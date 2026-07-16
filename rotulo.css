@@ -10,176 +10,131 @@
 
 .rotulo-page #header {
     position: sticky;
-    background: color-mix(in srgb, var(--color-white) 80%, transparent);
-    backdrop-filter: blur(6px);
+    top: 0;             /* fijado justo donde está: no hay recorrido hasta engancharse */
+    display: flow-root; /* evita que el margen del menú empuje el header hacia abajo */
+    /* degradado sutil: blanco arriba que se desvanece hacia abajo */
+    background: linear-gradient(
+        to bottom,
+        var(--color-white) 0%,
+        color-mix(in srgb, var(--color-white) 70%, transparent) 60%,
+        transparent 100%
+    );
 }
 
 /* Contenedor general */
 .ficha {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 100px 24px 80px;
+    padding: 34px 24px 40px;
 }
 
 .ficha-titulo {
     font-family: var(--font-h1);
-    font-size: clamp(32px, 6vw, 64px);
+    font-size: clamp(28px, 5vw, 48px);
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: -0.01em;
-    margin-bottom: 32px;
+    margin-bottom: 22px;
 }
 
-/* Dos columnas: original | svg */
+/* Dos columnas: original | descripción */
 .ficha-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: clamp(28px, 6vw, 72px);
     align-items: start;
 }
 
-.ficha-original,
-.ficha-svg {
+.ficha-original {
     margin: 0;
-}
-
-.ficha-grid figcaption {
-    font-family: var(--font-nav);
-    font-size: 13px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-brown);
-    margin-bottom: 10px;
 }
 
 .ficha-original img {
     display: block;
-    width: 100%;
+    width: 100%;              /* todas las fotos con el mismo ancho (el de su columna) */
     height: auto;
-    border-radius: 12px;
+    border-radius: 3px;
     box-shadow: 0 18px 50px oklch(0.2 0.02 95 / 0.18);
 }
 
-/* Lienzo del SVG */
-.svg-holder {
-    position: relative;
+/* Columna derecha: descripción del letrero.
+   Sticky: al hacer scroll la imagen se desplaza y el texto permanece quieto. */
+.ficha-descripcion {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 240px;
-    aspect-ratio: 4 / 3;
-    border: 1.5px dashed color-mix(in srgb, var(--color-black) 18%, transparent);
-    border-radius: 12px;
-    padding: 18px;
-    background: var(--color-white);
-    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: sticky;
+    top: 90px;                /* debajo del header */
 }
 
-.svg-holder svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    max-height: 60vh;
-    overflow: visible;
-}
-
-/* Trazo "caligráfico": cada path empieza oculto y se va dibujando.
-   El relleno (si lo hay) aparece después de trazar el contorno. */
-.svg-holder svg [data-draw] {
-    stroke: var(--color-black);
-    stroke-width: 3.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-dasharray: var(--len);
-    stroke-dashoffset: var(--len);
-}
-
-.svg-holder.animar svg [data-draw] {
-    animation:
-        dibujar var(--dur, 1.4s) ease forwards var(--delay, 0s),
-        rellenar 0.6s ease forwards calc(var(--delay, 0s) + var(--dur, 1.4s));
-}
-
-@keyframes dibujar {
-    to { stroke-dashoffset: 0; }
-}
-
-@keyframes rellenar {
-    to { fill: var(--fill-final); }
-}
-
-.svg-aviso {
+.ficha-descripcion-texto {
     font-family: var(--font-p);
-    font-size: 14px;
-    text-align: center;
-    color: color-mix(in srgb, var(--color-black) 55%, transparent);
-    line-height: 1.5;
-}
-
-/* Botón repetir */
-.btn-replay {
-    margin-top: 14px;
-    padding: 9px 16px;
-    font-family: var(--font-nav);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-white);
-    background: var(--color-black);
-    border: none;
-    border-radius: 999px;
-    cursor: none;
-    transition: background 0.25s ease, transform 0.1s ease;
-}
-
-.btn-replay:hover {
-    background: var(--color-brown);
-}
-
-.btn-replay:active {
-    transform: scale(0.96);
-}
-
-/* Texto: ubicación + historia */
-.ficha-texto {
-    margin-top: 56px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-}
-
-.ficha-texto .bloque h2 {
-    font-family: var(--font-h2);
-    font-size: 20px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--color-brown);
-}
-
-.ficha-texto .bloque p {
-    font-family: var(--font-p);
-    font-size: var(--font-size-p);
-    line-height: 1.65;
-    color: color-mix(in srgb, var(--color-black) 85%, transparent);
+    font-size: clamp(17px, 1.4vw, 19px);
+    line-height: 1.75;
+    max-width: 46ch;
+    color: color-mix(in srgb, var(--color-black) 88%, transparent);
     white-space: pre-line;
+    text-wrap: pretty;
 }
 
-/* Responsive: una sola columna */
+/* Fecha y autor de la foto ------------------------------------------------- */
+.ficha-meta {
+    margin-top: 18px;
+    font-family: var(--font-nav);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-black) 55%, transparent);
+}
+
+.ficha-meta:empty {
+    display: none;
+}
+
+/* Navegación anterior / siguiente ----------------------------------------- */
+.ficha-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.ficha-nav-boton {
+    display: inline-block;
+    padding: 10px 18px;
+    font-family: var(--font-nav);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-black);
+    border: 1.5px solid var(--color-black);
+    border-radius: 999px;
+    transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.ficha-nav-boton:hover {
+    background: var(--color-brown-dark);
+    border-color: var(--color-brown-dark);
+    color: var(--color-white);
+}
+
+/* Primera línea con algo más de presencia, tono editorial */
+.ficha-descripcion-texto::first-line {
+    font-weight: 500;
+    color: var(--color-black);
+}
+
+/* Responsive: una sola columna, descripción alineada arriba */
 @media (max-width: 760px) {
-    .ficha-grid,
-    .ficha-texto {
+    .ficha-grid {
         grid-template-columns: 1fr;
     }
-}
 
-/* Accesibilidad: sin animación de trazo si el usuario lo pide */
-@media (prefers-reduced-motion: reduce) {
-    .svg-holder svg [data-draw] {
-        stroke-dashoffset: 0;
-        animation: none;
-        fill: var(--fill-final);
+    .ficha-descripcion {
+        justify-content: flex-start;
+        padding-block: 0;
+        position: static;     /* sin sticky en una sola columna */
     }
 }

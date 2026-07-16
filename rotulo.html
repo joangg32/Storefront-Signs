@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rótulo · Rótulos animados</title>
-    <link rel="icon" type="image/png" href="./src/icon.png">
+    <title>Rótulo · Rótulos valencianos</title>
+    <link rel="icon" type="image/svg+xml" href="./src/icon.svg">
 
     <!-- Tipografía -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,8 +19,8 @@
     <header id="header">
         <nav>
             <ul class="header-menu">
-                <li class="header-menu-item">mante_G</li>
-                <li class="header-menu-item"><a href="./index.html" class="link-roll">Volver</a></li>
+                <li class="header-menu-item"><a href="./index.html#home" class="link-roll">Home</a></li>
+                <li class="header-menu-item"><a href="./info.html" class="link-roll">+Info</a></li>
             </ul>
         </nav>
     </header>
@@ -32,34 +32,27 @@
         <div class="ficha-grid">
             <!-- Columna izquierda: foto original -->
             <figure class="ficha-original">
-                <figcaption>Original</figcaption>
                 <img id="original" src="" alt="">
             </figure>
 
-            <!-- Columna derecha: representación SVG animada -->
-            <figure class="ficha-svg">
-                <figcaption>Representación</figcaption>
-                <div class="svg-holder" id="svg-holder">
-                    <p class="svg-aviso" id="svg-aviso">Cargando…</p>
-                </div>
-                <button class="btn-replay" id="replay" type="button" hidden>↻ Repetir trazo</button>
-            </figure>
-        </div>
+            <!-- Columna derecha: descripción del letrero -->
+            <div class="ficha-descripcion">
+                <p class="ficha-descripcion-texto" id="descripcion"></p>
 
-        <!--  DESCRIPCIÓN ============================ -->
-        <section class="ficha-texto">
-            <div class="bloque">
-                <h2>Ubicación</h2>
-                <p id="ubicacion"></p>
+                <!-- Fecha de la fotografía (solo si existe) -->
+                <p class="ficha-meta" id="meta"></p>
+
+                <!-- Navegación entre rótulos -->
+                <nav class="ficha-nav">
+                    <a class="ficha-nav-boton" id="nav-prev" href="#">&larr; Anterior</a>
+                    <a class="ficha-nav-boton" id="nav-next" href="#">Siguiente &rarr;</a>
+                </nav>
             </div>
-            <div class="bloque">
-                <h2>Historia</h2>
-                <p id="historia"></p>
-            </div>
-        </section>
+        </div>
     </main>
 
     <script src="./rotulos.js"></script>
     <script src="./rotulo.js" defer></script>
+    <script src="./transition.js" defer></script>
 </body>
 </html>
